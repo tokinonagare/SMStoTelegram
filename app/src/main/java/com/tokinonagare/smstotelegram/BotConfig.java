@@ -1,0 +1,22 @@
+package com.tokinonagare.smstotelegram;
+
+/**
+ * BOT & 发送目标频道 信息
+ * Created by tokinonagare on 05/10/2016.
+ */
+
+public class BotConfig {
+    private final static String BOT_TOKEN = "your bot_token";
+    private final static String BOT_REQUEST_DOMAIN = "https://api.telegram.org/bot"+ BOT_TOKEN + "/";
+
+    private final static String CHAT_ID = "your target chat_id";
+
+
+    public static String getBotRequestDomain() {
+        return BOT_REQUEST_DOMAIN;
+    }
+
+    public static String getChatId() {
+        return CHAT_ID;
+    }
+}
