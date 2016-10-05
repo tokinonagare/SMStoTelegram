@@ -1,12 +1,11 @@
 package com.tokinonagare.smstotelegram.message.model;
 
 import android.content.ContentResolver;
-import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Handler;
 
 import com.tokinonagare.smstotelegram.message.IMessageView;
+import com.tokinonagare.smstotelegram.message.presenter.MessagePresenterImp;
 
 /**
  * 获取最新短信内容
@@ -26,11 +25,10 @@ public class SmsReceiver {
     /**
      * 获取短信内容
      */
-    public String getSmsFromPhone() {
+    public String getSmsFromPhone(MessagePresenterImp.SmsObserver smsObserver) {
         String message = "短信内容";
-        SmsObserver smsObserver = new SmsObserver(smsHandler);
-        messageActivity.getMyContentResolver().registerContentObserver(SMS_INBOX, true, smsObserver);
 
+        messageActivity.getMyContentResolver().registerContentObserver(SMS_INBOX, true, smsObserver);
         ContentResolver cr = messageActivity.getMyContentResolver();
 
         // 获取短信：person，发件人；address，电话号码；body，内容；
@@ -55,25 +53,6 @@ public class SmsReceiver {
                 message = name + " " + number + " " + body;
             }
         }
-
         return message;
-    }
-
-    private Handler smsHandler = new Handler() {
-        //这里可以进行回调的操作
-    };
-
-    private class SmsObserver extends ContentObserver {
-
-        SmsObserver(Handler handler) {
-            super(handler);
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            super.onChange(selfChange);
-            // 每当有新短信到来时，使用获取短消息的方法
-            getSmsFromPhone();
-        }
     }
 }

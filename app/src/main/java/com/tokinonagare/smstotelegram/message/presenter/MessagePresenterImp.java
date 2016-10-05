@@ -1,5 +1,8 @@
 package com.tokinonagare.smstotelegram.message.presenter;
 
+import android.database.ContentObserver;
+import android.os.Handler;
+
 import com.google.gson.JsonObject;
 import com.tokinonagare.smstotelegram.BotConfig;
 import com.tokinonagare.smstotelegram.http.HttpCallBack;
@@ -24,11 +27,14 @@ public class MessagePresenterImp {
     }
 
     public void sendMessage() {
+        // 创建短信变化监控
+        SmsObserver smsObserver = new SmsObserver(smsHandler);
+
         // 显示短信发送情况
         messageView.setMessageSendStatus("短信发送中，请稍等");
 
         SmsReceiver smsReceiver = new SmsReceiver(messageView);
-        String message = smsReceiver.getSmsFromPhone();
+        String message = smsReceiver.getSmsFromPhone(smsObserver);
 
         HttpRequest httpRequest = new HttpRequest();
         IHttpCallBack httpCallBack = GeneratorCallBack();
@@ -63,5 +69,26 @@ public class MessagePresenterImp {
                 messageView.setMessageSendStatus(err);
             }
         };
+    }
+
+    private Handler smsHandler = new Handler() {
+        //这里可以进行回调的操作
+    };
+
+    /**
+     * 短信变化监控
+     */
+    public class SmsObserver extends ContentObserver {
+
+        SmsObserver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            super.onChange(selfChange);
+            // 每当有新短信到来时，再次发送短信
+            sendMessage();
+        }
     }
 }
