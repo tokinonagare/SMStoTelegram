@@ -1,6 +1,8 @@
 package com.tokinonagare.smstotelegram.message;
 
 import android.content.ContentResolver;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -19,7 +21,6 @@ public class MessageActivity extends AppCompatActivity implements IMessageView {
     private TextView messageSendStatus;
     private MessagePresenterImp messagePresenterImp = new MessagePresenterImp(this);
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,8 +29,6 @@ public class MessageActivity extends AppCompatActivity implements IMessageView {
         messageContent = (TextView) findViewById(R.id.message_text);
         messageSendStatus = (TextView) findViewById(R.id.message_send_status);
 
-        // 发送消息
-        messagePresenterImp.sendMessage();
     }
 
     /**
@@ -58,5 +57,10 @@ public class MessageActivity extends AppCompatActivity implements IMessageView {
     @Override
     public ContentResolver getMyContentResolver() {
         return getContentResolver();
+    }
+
+    @Override
+    public SharedPreferences getMessagePreference() {
+        return getSharedPreferences("messageName", Context.MODE_PRIVATE);
     }
 }

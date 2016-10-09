@@ -1,6 +1,7 @@
 package com.tokinonagare.smstotelegram.message;
 
 import android.content.ContentResolver;
+import android.content.SharedPreferences;
 
 /**
  * Created by tokinonagare on 05/10/2016.
@@ -11,4 +12,6 @@ public interface IMessageView {
     void setMessageContent(String message);
 
     void setMessageSendStatus(String status);
+
+    SharedPreferences getMessagePreference();
 }
