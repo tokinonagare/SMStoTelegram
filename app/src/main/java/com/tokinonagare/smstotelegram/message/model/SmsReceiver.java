@@ -8,7 +8,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.text.TextUtils;
 
-import com.tokinonagare.smstotelegram.message.IMessageView;
+import com.tokinonagare.smstotelegram.message.MessageActivity;
 import com.tokinonagare.smstotelegram.message.presenter.IMessagePresenter;
 import com.tokinonagare.smstotelegram.message.presenter.MessagePresenterImp;
 
@@ -21,24 +21,24 @@ public class SmsReceiver {
 
     private final static Uri SMS_INBOX = Uri.parse("content://sms/");
 
-    private IMessageView messageView;
+    private MessageActivity messageActivity;
     private SharedPreferences messagePreference;
     private SharedPreferences.Editor messageEditor;
 
-    public SmsReceiver(IMessageView messageView) {
-        this.messageView = messageView;
+    public SmsReceiver(MessageActivity messageActivity) {
+        this.messageActivity = messageActivity;
     }
 
     public String getSmsFromPhone() {
         String message = "短信内容";
 
         // 为缓存作准备
-        messagePreference = messageView.getMessagePreference();
+        messagePreference = messageActivity.getMessagePreference();
         messageEditor = messagePreference.edit();
         // 获取短信内容
         SmsObserver smsObserver = new SmsObserver(smsHandler);
-        messageView.getMyContentResolver().registerContentObserver(SMS_INBOX, true, smsObserver);
-        ContentResolver cr = messageView.getMyContentResolver();
+        messageActivity.getMyContentResolver().registerContentObserver(SMS_INBOX, true, smsObserver);
+        ContentResolver cr = messageActivity.getMyContentResolver();
 
         // 获取短信：person，发件人；address，电话号码；body，内容；
         String[] projection = new String[] {"person", "address", "body"};
@@ -84,8 +84,8 @@ public class SmsReceiver {
 
             if (!TextUtils.equals(message, messageCache)) {
                 // 发送短信
-                IMessagePresenter messagePresenterImp = new MessagePresenterImp(messageView);
-                messagePresenterImp.sendMessage();
+                IMessagePresenter messagePresenterImp = new MessagePresenterImp(messageActivity);
+                messagePresenterImp.sendMessage(message);
 
                 // 缓存当前短信
                 messageEditor.putString(messageCacheKey, message);

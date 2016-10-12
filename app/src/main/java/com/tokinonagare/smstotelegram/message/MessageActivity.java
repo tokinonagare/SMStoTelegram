@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.tokinonagare.smstotelegram.R;
+import com.tokinonagare.smstotelegram.message.model.CallReceiver;
+import com.tokinonagare.smstotelegram.message.model.SmsReceiver;
 import com.tokinonagare.smstotelegram.message.presenter.MessagePresenterImp;
 
 /**
@@ -29,13 +31,20 @@ public class MessageActivity extends AppCompatActivity implements IMessageView {
         messageContent = (TextView) findViewById(R.id.message_text);
         messageSendStatus = (TextView) findViewById(R.id.message_send_status);
 
+        // 开启来电监听服务
+        CallReceiver callReceiver = new CallReceiver(this);
+        callReceiver.getCallFromPhone();
     }
 
     /**
      * 手动发送短信
      */
     public void sendMessage(View view) {
-        messagePresenterImp.sendMessage();
+        // 获取短信内容
+        SmsReceiver smsReceiver = new SmsReceiver(this);
+        String message = smsReceiver.getSmsFromPhone();
+
+        messagePresenterImp.sendMessage(message);
     }
 
     /**

@@ -5,5 +5,5 @@ package com.tokinonagare.smstotelegram.message.presenter;
  */
 
 public interface IMessagePresenter {
-    void sendMessage();
+    void sendMessage(String message);
 }

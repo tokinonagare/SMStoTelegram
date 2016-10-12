@@ -6,6 +6,9 @@
     <uses-permission android:name="android.permission.WRITE_SMS"/>
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
 
+    <!-- 来电状况权限-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+
     <!-- 网络访问权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
 

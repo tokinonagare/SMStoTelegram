@@ -6,7 +6,6 @@ import com.tokinonagare.smstotelegram.http.HttpCallBack;
 import com.tokinonagare.smstotelegram.http.HttpRequest;
 import com.tokinonagare.smstotelegram.http.IHttpCallBack;
 import com.tokinonagare.smstotelegram.message.IMessageView;
-import com.tokinonagare.smstotelegram.message.model.SmsReceiver;
 
 /**
  * 向BOT发送消息
@@ -23,13 +22,9 @@ public class MessagePresenterImp implements IMessagePresenter {
     }
 
     @Override
-    public void sendMessage() {
+    public void sendMessage(String message) {
         // 显示短信发送情况
-        messageView.setMessageSendStatus("短信发送中，请稍等");
-
-        // 获取短信内容
-        SmsReceiver smsReceiver = new SmsReceiver(messageView);
-        String message = smsReceiver.getSmsFromPhone();
+        messageView.setMessageSendStatus("发送中，请稍等");
 
         // 发送短信
         HttpRequest httpRequest = new HttpRequest();
@@ -48,7 +43,7 @@ public class MessagePresenterImp implements IMessagePresenter {
                 super.onSuccess(jsonObject);
                 boolean ok = jsonObject.get("ok").getAsBoolean();
                 if (ok) {
-                    messageView.setMessageSendStatus("短信发送成功！");
+                    messageView.setMessageSendStatus("发送成功！");
                 } else {
                     // 如果发送失败显示错误代码
                     int errorCode = jsonObject.get("error_code").getAsInt();
