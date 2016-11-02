@@ -1,4 +1,4 @@
-package com.tokinonagare.smstotelegram.message.service;
+package com.tokinonagare.smstotelegram.service;
 
 import android.app.Notification;
 import android.app.Service;
@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.widget.Toast;
 
 import com.tokinonagare.smstotelegram.message.model.SmsReceiver;
 
@@ -58,7 +57,10 @@ public class ReceiverService extends Service {
     @Override
     public void onDestroy() {
 
-        Toast.makeText(this, "短信服务关闭", Toast.LENGTH_SHORT).show();
+        Intent restartService = new Intent(this, ReceiverService.class);
+        this.startService(restartService);
+
+        super.onDestroy();
     }
 
     @Nullable

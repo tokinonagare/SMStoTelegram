@@ -9,7 +9,7 @@ import com.tokinonagare.smstotelegram.R;
 import com.tokinonagare.smstotelegram.message.model.CallReceiver;
 import com.tokinonagare.smstotelegram.message.model.SmsReceiver;
 import com.tokinonagare.smstotelegram.message.presenter.MessagePresenterImp;
-import com.tokinonagare.smstotelegram.message.service.ReceiverService;
+import com.tokinonagare.smstotelegram.service.ReceiverService;
 
 /**
  * Created by tokinonagare on 05/10/2016.
