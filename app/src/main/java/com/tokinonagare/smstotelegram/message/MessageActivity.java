@@ -34,6 +34,10 @@ public class MessageActivity extends AppCompatActivity implements IMessageView {
         // 开启来电监听服务
         CallReceiver callReceiver = new CallReceiver(this);
         callReceiver.getCallFromPhone();
+
+        // 开启短信监听服务
+        SmsReceiver smsReceiver = new SmsReceiver(this);
+        smsReceiver.getSmsFromPhone();
     }
 
     /**
