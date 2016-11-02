@@ -7,9 +7,9 @@ package com.tokinonagare.smstotelegram;
 
 public class BotConfig {
 
-    private final static String CHAT_ID = ""; // 频道 Chat_id
+    private final static String CHAT_ID = "";// 频道ID
 
-    private final static String BOT_TOKEN = ""; // 机器人 Token
+    private final static String BOT_TOKEN = ""; // 机器人Token
     private final static String BOT_REQUEST_DOMAIN = "https://api.telegram.org/bot"+ BOT_TOKEN + "/";
 
 

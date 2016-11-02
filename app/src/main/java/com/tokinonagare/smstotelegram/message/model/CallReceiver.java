@@ -35,8 +35,8 @@ public class CallReceiver  {
            super.onCallStateChanged(state, incomingNumber);
             // 当有新来电时发送该来电信息
             if (state == TelephonyManager.CALL_STATE_RINGING) {
-                IMessagePresenter messagePresenterImp = new MessagePresenterImp(messageActivity);
-                String message = "新来电: " + incomingNumber;
+                IMessagePresenter messagePresenterImp = new MessagePresenterImp();
+                String message = "新来电! " + incomingNumber;
                 messagePresenterImp.sendMessage(message);
             }
         }

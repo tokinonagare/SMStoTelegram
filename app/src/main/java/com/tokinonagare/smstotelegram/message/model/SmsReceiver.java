@@ -1,6 +1,8 @@
 package com.tokinonagare.smstotelegram.message.model;
 
 import android.content.ContentResolver;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.database.Cursor;
@@ -8,7 +10,6 @@ import android.net.Uri;
 import android.os.Handler;
 import android.text.TextUtils;
 
-import com.tokinonagare.smstotelegram.message.MessageActivity;
 import com.tokinonagare.smstotelegram.message.presenter.IMessagePresenter;
 import com.tokinonagare.smstotelegram.message.presenter.MessagePresenterImp;
 
@@ -17,28 +18,27 @@ import com.tokinonagare.smstotelegram.message.presenter.MessagePresenterImp;
  * Created by tokinonagare on 05/10/2016.
  */
 
-public class SmsReceiver {
+public class SmsReceiver extends ContextWrapper {
 
     private final static Uri SMS_INBOX = Uri.parse("content://sms/");
 
-    private MessageActivity messageActivity;
     private SharedPreferences messagePreference;
     private SharedPreferences.Editor messageEditor;
 
-    public SmsReceiver(MessageActivity messageActivity) {
-        this.messageActivity = messageActivity;
+    public SmsReceiver(Context base) {
+        super(base);
     }
 
     public String getSmsFromPhone() {
         String message = "短信内容";
 
         // 为缓存作准备
-        messagePreference = messageActivity.getMessagePreference();
+        messagePreference = getSharedPreferences("messageName", Context.MODE_PRIVATE);
         messageEditor = messagePreference.edit();
         // 获取短信内容
         SmsObserver smsObserver = new SmsObserver(smsHandler);
-        messageActivity.getMyContentResolver().registerContentObserver(SMS_INBOX, true, smsObserver);
-        ContentResolver cr = messageActivity.getMyContentResolver();
+        getContentResolver().registerContentObserver(SMS_INBOX, true, smsObserver);
+        ContentResolver cr = getContentResolver();
 
         // 获取短信：person，发件人；address，电话号码；body，内容；
         String[] projection = new String[] {"person", "address", "body"};
@@ -84,7 +84,7 @@ public class SmsReceiver {
 
             if (!TextUtils.equals(message, messageCache)) {
                 // 发送短信
-                IMessagePresenter messagePresenterImp = new MessagePresenterImp(messageActivity);
+                IMessagePresenter messagePresenterImp = new MessagePresenterImp();
                 messagePresenterImp.sendMessage(message);
 
                 // 缓存当前短信

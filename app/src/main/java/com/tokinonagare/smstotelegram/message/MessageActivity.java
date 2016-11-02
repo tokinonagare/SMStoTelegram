@@ -1,43 +1,36 @@
 package com.tokinonagare.smstotelegram.message;
 
-import android.content.ContentResolver;
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.TextView;
 
 import com.tokinonagare.smstotelegram.R;
 import com.tokinonagare.smstotelegram.message.model.CallReceiver;
 import com.tokinonagare.smstotelegram.message.model.SmsReceiver;
 import com.tokinonagare.smstotelegram.message.presenter.MessagePresenterImp;
+import com.tokinonagare.smstotelegram.message.service.ReceiverService;
 
 /**
  * Created by tokinonagare on 05/10/2016.
  */
 
-public class MessageActivity extends AppCompatActivity implements IMessageView {
+public class MessageActivity extends AppCompatActivity {
 
-    private TextView messageContent;
-    private TextView messageSendStatus;
-    private MessagePresenterImp messagePresenterImp = new MessagePresenterImp(this);
+    private MessagePresenterImp messagePresenterImp = new MessagePresenterImp();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.home);
-        messageContent = (TextView) findViewById(R.id.message_text);
-        messageSendStatus = (TextView) findViewById(R.id.message_send_status);
+
+        Intent startIntent = new Intent(this, ReceiverService.class);
+        startService(startIntent);
 
         // 开启来电监听服务
         CallReceiver callReceiver = new CallReceiver(this);
         callReceiver.getCallFromPhone();
-
-        // 开启短信监听服务
-        SmsReceiver smsReceiver = new SmsReceiver(this);
-        smsReceiver.getSmsFromPhone();
     }
 
     /**
@@ -49,31 +42,5 @@ public class MessageActivity extends AppCompatActivity implements IMessageView {
         String message = smsReceiver.getSmsFromPhone();
 
         messagePresenterImp.sendMessage(message);
-    }
-
-    /**
-     * 显示短信内容
-     */
-    @Override
-    public void setMessageContent(String message) {
-        messageContent.setText(message);
-    }
-
-    /**
-     * 显示短信发送状态
-     */
-    @Override
-    public void setMessageSendStatus(String status) {
-        messageSendStatus.setText(status);
-    }
-
-    @Override
-    public ContentResolver getMyContentResolver() {
-        return getContentResolver();
-    }
-
-    @Override
-    public SharedPreferences getMessagePreference() {
-        return getSharedPreferences("messageName", Context.MODE_PRIVATE);
     }
 }

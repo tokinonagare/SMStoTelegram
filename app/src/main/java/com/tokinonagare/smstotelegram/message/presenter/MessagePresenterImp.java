@@ -1,11 +1,12 @@
 package com.tokinonagare.smstotelegram.message.presenter;
 
+import android.util.Log;
+
 import com.google.gson.JsonObject;
 import com.tokinonagare.smstotelegram.BotConfig;
 import com.tokinonagare.smstotelegram.http.HttpCallBack;
 import com.tokinonagare.smstotelegram.http.HttpRequest;
 import com.tokinonagare.smstotelegram.http.IHttpCallBack;
-import com.tokinonagare.smstotelegram.message.IMessageView;
 
 /**
  * 向BOT发送消息
@@ -15,24 +16,15 @@ import com.tokinonagare.smstotelegram.message.IMessageView;
 public class MessagePresenterImp implements IMessagePresenter {
 
     private final static String chatId = BotConfig.getChatId();
-    private IMessageView messageView;
-
-    public MessagePresenterImp(IMessageView messageView) {
-        this.messageView = messageView;
-    }
 
     @Override
     public void sendMessage(String message) {
-        // 显示短信发送情况
-        messageView.setMessageSendStatus("发送中，请稍等");
 
         // 发送短信
         HttpRequest httpRequest = new HttpRequest();
         IHttpCallBack httpCallBack = GeneratorCallBack();
         httpRequest.sendMessage(chatId, message, httpCallBack);
 
-        // 显示最新的短信内容
-        messageView.setMessageContent(message);
     }
 
     private IHttpCallBack GeneratorCallBack() {
@@ -42,21 +34,18 @@ public class MessagePresenterImp implements IMessagePresenter {
             public void onSuccess(JsonObject jsonObject) {
                 super.onSuccess(jsonObject);
                 boolean ok = jsonObject.get("ok").getAsBoolean();
-                if (ok) {
-                    messageView.setMessageSendStatus("发送成功！");
-                } else {
-                    // 如果发送失败显示错误代码
+                if (!ok) {
                     int errorCode = jsonObject.get("error_code").getAsInt();
                     String description = jsonObject.get("description").getAsString();
                     String err = "error_code: " + errorCode + " description: " + description;
-                    messageView.setMessageSendStatus(err);
+                    Log.d("SendMessageFailed ", err);
                 }
             }
 
             @Override
             public void onFailed(String err) {
                 super.onFailed(err);
-                messageView.setMessageSendStatus(err);
+                Log.d("SendMessageFailed ", err);
             }
         };
     }
