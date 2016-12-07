@@ -1,12 +1,11 @@
-package com.tokinonagare.smstotelegram.message.model;
+package com.tokinonagare.smstotelegram.receiver;
 
 import android.content.Context;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
-import com.tokinonagare.smstotelegram.message.MessageActivity;
-import com.tokinonagare.smstotelegram.message.presenter.IMessagePresenter;
-import com.tokinonagare.smstotelegram.message.presenter.MessagePresenterImp;
+import com.tokinonagare.smstotelegram.model.MessageSend;
+import com.tokinonagare.smstotelegram.service.ReceiverService;
 
 /**
  * 监听来电
@@ -15,15 +14,15 @@ import com.tokinonagare.smstotelegram.message.presenter.MessagePresenterImp;
 
 public class CallReceiver  {
 
-    private MessageActivity messageActivity;
+    private ReceiverService receiverService;
 
-    public CallReceiver(MessageActivity messageActivity) {
-        this.messageActivity = messageActivity;
+    public CallReceiver(ReceiverService receiverService) {
+        this.receiverService = receiverService;
     }
 
     public void getCallFromPhone() {
         MyPhoneSateListener myPhoneSateListener = new MyPhoneSateListener();
-        TelephonyManager telephonyManager = (TelephonyManager) messageActivity.getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager telephonyManager = (TelephonyManager) receiverService.getSystemService(Context.TELEPHONY_SERVICE);
         telephonyManager.listen(myPhoneSateListener, PhoneStateListener.LISTEN_CALL_STATE);
 
     }
@@ -35,9 +34,9 @@ public class CallReceiver  {
            super.onCallStateChanged(state, incomingNumber);
             // 当有新来电时发送该来电信息
             if (state == TelephonyManager.CALL_STATE_RINGING) {
-                IMessagePresenter messagePresenterImp = new MessagePresenterImp();
+                MessageSend messageSend = new MessageSend();
                 String message = "新来电! " + incomingNumber;
-                messagePresenterImp.sendMessage(message);
+                messageSend.sendMessage(message);
             }
         }
     }

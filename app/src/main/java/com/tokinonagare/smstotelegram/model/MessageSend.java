@@ -1,4 +1,4 @@
-package com.tokinonagare.smstotelegram.message.presenter;
+package com.tokinonagare.smstotelegram.model;
 
 import android.util.Log;
 
@@ -13,11 +13,10 @@ import com.tokinonagare.smstotelegram.http.IHttpCallBack;
  * Created by tokinonagare on 05/10/2016.
  */
 
-public class MessagePresenterImp implements IMessagePresenter {
+public class MessageSend  {
 
     private final static String chatId = BotConfig.getChatId();
 
-    @Override
     public void sendMessage(String message) {
 
         // 发送短信

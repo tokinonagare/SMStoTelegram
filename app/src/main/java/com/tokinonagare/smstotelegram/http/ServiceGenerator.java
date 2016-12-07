@@ -15,7 +15,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 class ServiceGenerator {
 
-    // Url会根据请求时的服务器的连接快慢来『重新』决定，所以该处设定的Url只是为了满足方法的需求
     private static final String API_BASE_URL = BotConfig.getBotRequestDomain();
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();

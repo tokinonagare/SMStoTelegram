@@ -1,4 +1,4 @@
-package com.tokinonagare.smstotelegram.message.model;
+package com.tokinonagare.smstotelegram.receiver;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -10,8 +10,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.text.TextUtils;
 
-import com.tokinonagare.smstotelegram.message.presenter.IMessagePresenter;
-import com.tokinonagare.smstotelegram.message.presenter.MessagePresenterImp;
+import com.tokinonagare.smstotelegram.model.MessageSend;
 
 /**
  * 获取最新短信内容
@@ -84,8 +83,8 @@ public class SmsReceiver extends ContextWrapper {
 
             if (!TextUtils.equals(message, messageCache)) {
                 // 发送短信
-                IMessagePresenter messagePresenterImp = new MessagePresenterImp();
-                messagePresenterImp.sendMessage(message);
+                MessageSend messageSend = new MessageSend();
+                messageSend.sendMessage(message);
 
                 // 缓存当前短信
                 messageEditor.putString(messageCacheKey, message);

@@ -3,11 +3,14 @@ package com.tokinonagare.smstotelegram.service;
 import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
-import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v7.app.NotificationCompat;
+import android.util.Log;
 
-import com.tokinonagare.smstotelegram.message.model.SmsReceiver;
+import com.tokinonagare.smstotelegram.R;
+import com.tokinonagare.smstotelegram.receiver.CallReceiver;
+import com.tokinonagare.smstotelegram.receiver.SmsReceiver;
 
 /**
  * Created by tokinonagare on 02/11/2016.
@@ -15,52 +18,36 @@ import com.tokinonagare.smstotelegram.message.model.SmsReceiver;
 
 public class ReceiverService extends Service {
 
-    private final static int GRAY_SERVICE_ID = 1001;
+    private final static String TAG = ReceiverService.class.getSimpleName();
+
+    private final static int FOREGROUND_ID = 1001;
 
     @Override
     public void onCreate() {
         startReceiver();
     }
 
-    // 前台service灰色保护
+    // 前台service白色保护
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (Build.VERSION.SDK_INT < 18) {
-            startForeground(GRAY_SERVICE_ID, new Notification());
-        } else {
-            Intent innerIntent = new Intent(this, GrayInnerService.class);
-            startService(innerIntent);
-            startForeground(GRAY_SERVICE_ID, new Notification());
-        }
+        Log.i(TAG, "WhiteService->onStartCommand");
 
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        builder.setSmallIcon(R.mipmap.ic_launcher);
+        builder.setContentTitle("SmsToTelegram");
+        builder.setContentText("I am a Sms && Call Receive service");
+        builder.setWhen(System.currentTimeMillis());
+        Notification notification = builder.build();
+        startForeground(FOREGROUND_ID, notification);
         return super.onStartCommand(intent, flags, startId);
-    }
-
-    public static class GrayInnerService extends Service {
-
-        @Override
-        public int onStartCommand(Intent intent, int flags, int startId) {
-            startForeground(GRAY_SERVICE_ID, new Notification());
-            stopForeground(true);
-            stopSelf();
-            return super.onStartCommand(intent, flags, startId);
-        }
-
-        @Nullable
-        @Override
-        public IBinder onBind(Intent intent) {
-            return null;
-        }
-
     }
 
     @Override
     public void onDestroy() {
+        super.onDestroy();
 
         Intent restartService = new Intent(this, ReceiverService.class);
-        this.startService(restartService);
-
-        super.onDestroy();
+        startService(restartService);
     }
 
     @Nullable
@@ -70,6 +57,10 @@ public class ReceiverService extends Service {
     }
 
     private void startReceiver() {
+
+        // 开启来电监听服务
+        CallReceiver callReceiver = new CallReceiver(this);
+        callReceiver.getCallFromPhone();
 
         // 开启短信监听服务
         SmsReceiver smsReceiver = new SmsReceiver(this);

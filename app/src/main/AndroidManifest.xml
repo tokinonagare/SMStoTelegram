@@ -9,12 +9,17 @@
     <!-- 来电状况权限-->
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
+
     <!-- 网络访问权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <!-- 存储空间权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <!-- 开机启动权限 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
 
     <application
         android:allowBackup="true"
@@ -23,13 +28,17 @@
         android:supportsRtl="true"
         android:persistent="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".message.MessageActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+        <receiver android:name=".service.LaunchReceiver">
+            <intent-filter>
+                <!-- 收到短信 -->
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+                <!-- 接到电话 -->
+                <action android:name="android.intent.action.PHONE_STATE" />
+                <!-- 重启开机 -->
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
-        </activity>
+        </receiver>
 
         <service android:name=".service.ReceiverService">
         </service>
