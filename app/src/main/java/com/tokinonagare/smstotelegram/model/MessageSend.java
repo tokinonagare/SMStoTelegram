@@ -3,6 +3,8 @@ package com.tokinonagare.smstotelegram.model;
 import android.content.Context;
 import android.util.Log;
 
+import android.widget.Toast;
+
 import com.google.gson.JsonObject;
 import com.tokinonagare.smstotelegram.BotConfig;
 import com.tokinonagare.smstotelegram.http.HttpCallBack;
@@ -58,6 +60,7 @@ public class MessageSend {
             public void onFailed(String err) {
                 super.onFailed(err);
                 Log.d("SendMessageFailed ", err);
+                Toast.makeText(context.getApplicationContext(), err, Toast.LENGTH_LONG).show();
             }
         };
     }

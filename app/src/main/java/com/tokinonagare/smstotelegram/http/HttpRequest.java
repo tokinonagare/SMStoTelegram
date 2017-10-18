@@ -27,7 +27,11 @@ public class HttpRequest {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 JsonObject jsonObject = response.body();
-                callBack.onSuccess(jsonObject);
+                if (jsonObject != null) {
+                    callBack.onSuccess(jsonObject);
+                } else {
+                    callBack.onFailed("发送失败，请检查 bot token 和 group id 是否正确");
+                }
             }
 
             @Override
