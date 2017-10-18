@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -67,5 +68,7 @@ public class MessageActivity extends AppCompatActivity {
         editor.putString("botToken", botToken);
 
         editor.apply();
+
+        Toast.makeText(getApplicationContext(), "保存成功", Toast.LENGTH_SHORT).show();
     }
 }
