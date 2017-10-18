@@ -32,13 +32,22 @@
         android:hint="@string/bot_token" />
 
     <Button
-        android:id="@+id/button"
-        android:text="@string/button_show"
+        android:id="@+id/save_config"
+        android:text="@string/save_config"
         android:onClick="saveConfig"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="26dp"
         android:layout_below="@+id/botToken"
         android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/test_config"
+        android:onClick="testConfig"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/save_config"
+        android:layout_centerVertical="true"
+        android:text="@string/test_config" />
 
 </RelativeLayout>

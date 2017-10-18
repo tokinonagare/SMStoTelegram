@@ -12,6 +12,7 @@ import android.content.SharedPreferences.Editor;
 
 import com.tokinonagare.smstotelegram.R;
 import com.tokinonagare.smstotelegram.service.ReceiverService;
+import com.tokinonagare.smstotelegram.model.MessageSend;
 
 /**
  * Created by tokinonagare on 05/10/2016.
@@ -20,6 +21,7 @@ import com.tokinonagare.smstotelegram.service.ReceiverService;
 public class MessageActivity extends AppCompatActivity {
 
     private EditText editor_groupId, editor_botToken;
+    private MessageSend messageSend;
 
     private static final String FILENAME = "group_id_and_bot_token";
 
@@ -38,6 +40,8 @@ public class MessageActivity extends AppCompatActivity {
         // 启动 短信 & 电话 接收服务
         Intent startIntent = new Intent(this, ReceiverService.class);
         startService(startIntent);
+
+        messageSend = new MessageSend(this);
     }
 
     /**
@@ -70,5 +74,13 @@ public class MessageActivity extends AppCompatActivity {
         editor.apply();
 
         Toast.makeText(getApplicationContext(), "保存成功", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 发送测试消息，验证配置信息是否正确
+     * @param view
+     */
+    public void testConfig(View view) {
+        messageSend.sendMessage("发送测试消息 1234 TestMessage");
     }
 }

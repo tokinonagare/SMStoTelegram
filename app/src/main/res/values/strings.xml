@@ -2,5 +2,6 @@
     <string name="app_name">SMStoTg</string>
     <string name="group_id">频道 ID</string>
     <string name="bot_token">机器人 Token</string>
-    <string name="button_show">保存</string>
+    <string name="save_config">保存</string>
+    <string name="test_config">测试</string>
 </resources>
