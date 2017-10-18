@@ -5,18 +5,30 @@ package com.tokinonagare.smstotelegram;
  * Created by tokinonagare on 05/10/2016.
  */
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 public class BotConfig {
 
-    private final static String CHAT_ID = "";// 频道ID
-    private final static String BOT_TOKEN = ""; // 机器人Token
+    private final SharedPreferences sharedPreferences;
 
-    private final static String BOT_REQUEST_DOMAIN = "https://api.telegram.org/bot"+ BOT_TOKEN + "/";
+    private static final String FILENAME = "group_id_and_bot_token";
 
-    public static String getChatId() {
-        return CHAT_ID;
+    private final static String BOT_REQUEST_DOMAIN = "https://api.telegram.org/";
+
+    public BotConfig(Context context) {
+        sharedPreferences = context.getSharedPreferences(FILENAME, Context.MODE_PRIVATE);
     }
 
-    public static String getBotRequestDomain() {
-        return BOT_REQUEST_DOMAIN;
+    public String getBotRequestDomain() {
+        return BOT_REQUEST_DOMAIN + "bot" + getBotToken() + "/";
+    }
+
+    public String getChatID() {
+        return sharedPreferences.getString("groupId", "");
+    }
+
+    private String getBotToken() {
+        return sharedPreferences.getString("botToken", "");
     }
 }

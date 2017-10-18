@@ -29,6 +29,14 @@
         android:persistent="true"
         android:theme="@style/AppTheme">
 
+        <activity android:name=".message.MessageActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <receiver android:name=".service.LaunchReceiver">
             <intent-filter>
                 <!-- 收到短信 -->

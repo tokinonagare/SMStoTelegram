@@ -14,15 +14,17 @@ import com.tokinonagare.smstotelegram.service.ReceiverService;
 
 public class CallReceiver  {
 
-    private ReceiverService receiverService;
+    private Context context;
+    private MessageSend messageSend;
 
-    public CallReceiver(ReceiverService receiverService) {
-        this.receiverService = receiverService;
+    public CallReceiver(Context context) {
+        this.context = context;
+        messageSend = new MessageSend(context);
     }
 
     public void getCallFromPhone() {
         MyPhoneSateListener myPhoneSateListener = new MyPhoneSateListener();
-        TelephonyManager telephonyManager = (TelephonyManager) receiverService.getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         telephonyManager.listen(myPhoneSateListener, PhoneStateListener.LISTEN_CALL_STATE);
 
     }
@@ -34,7 +36,6 @@ public class CallReceiver  {
            super.onCallStateChanged(state, incomingNumber);
             // 当有新来电时发送该来电信息
             if (state == TelephonyManager.CALL_STATE_RINGING) {
-                MessageSend messageSend = new MessageSend();
                 String message = "新来电! " + incomingNumber;
                 messageSend.sendMessage(message);
             }

@@ -1,5 +1,6 @@
 package com.tokinonagare.smstotelegram.http;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.JsonObject;
@@ -15,9 +16,10 @@ import retrofit2.Response;
 
 public class HttpRequest {
 
-    private IHttpRequest basicServer = ServiceGenerator.createService(IHttpRequest.class);
 
-    public void sendMessage(String chatId, String message, final IHttpCallBack callBack) {
+    public void sendMessage(String chatId, String message, final IHttpCallBack callBack, Context context) {
+
+        IHttpRequest basicServer = ServiceGenerator.createService(IHttpRequest.class, context);
 
         Call<JsonObject> call = basicServer.sendMessageServiceCreate(chatId, message);
 

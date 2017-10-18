@@ -23,9 +23,12 @@ public class SmsReceiver extends ContextWrapper {
 
     private SharedPreferences messagePreference;
     private SharedPreferences.Editor messageEditor;
+    private MessageSend messageSend;
 
-    public SmsReceiver(Context base) {
-        super(base);
+
+    public SmsReceiver(Context context) {
+        super(context);
+        messageSend = new MessageSend(context);
     }
 
     public String getSmsFromPhone() {
@@ -83,7 +86,6 @@ public class SmsReceiver extends ContextWrapper {
 
             if (!TextUtils.equals(message, messageCache)) {
                 // 发送短信
-                MessageSend messageSend = new MessageSend();
                 messageSend.sendMessage(message);
 
                 // 缓存当前短信

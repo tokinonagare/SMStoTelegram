@@ -1,5 +1,6 @@
 package com.tokinonagare.smstotelegram.model;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.JsonObject;
@@ -13,17 +14,29 @@ import com.tokinonagare.smstotelegram.http.IHttpCallBack;
  * Created by tokinonagare on 05/10/2016.
  */
 
-public class MessageSend  {
+public class MessageSend {
+    private Context context;
+    private BotConfig botConfig;
 
-    private final static String chatId = BotConfig.getChatId();
+    public MessageSend(Context context) {
+        this.context = context;
+        botConfig = new BotConfig(context);
+    }
 
     public void sendMessage(String message) {
 
         // 发送短信
+        String chatId = getChatId();
+
         HttpRequest httpRequest = new HttpRequest();
         IHttpCallBack httpCallBack = GeneratorCallBack();
-        httpRequest.sendMessage(chatId, message, httpCallBack);
 
+        httpRequest.sendMessage(chatId, message, httpCallBack, context);
+
+    }
+
+    private String getChatId() {
+        return  botConfig.getChatID();
     }
 
     private IHttpCallBack GeneratorCallBack() {

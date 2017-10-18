@@ -13,18 +13,15 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-class ServiceGenerator {
+import android.content.Context;
 
-    private static final String API_BASE_URL = BotConfig.getBotRequestDomain();
+class ServiceGenerator {
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
-    private static Retrofit.Builder builder =
-            new Retrofit.Builder()
-                    .baseUrl(API_BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create());
+    static <S> S createService(Class<S> serviceClass, Context context) {
 
-    static <S> S createService(Class<S> serviceClass) {
+        BotConfig botConfig = new BotConfig(context);
 
         // 当IP不存在；网络极差；代理服务器不存在时依然进行重连
         httpClient.retryOnConnectionFailure(true);
@@ -33,6 +30,12 @@ class ServiceGenerator {
         httpClient.connectTimeout(15, TimeUnit.SECONDS);
         httpClient.readTimeout(20, TimeUnit.SECONDS);
         httpClient.writeTimeout(20, TimeUnit.SECONDS);
+
+        Retrofit.Builder builder =
+                new Retrofit.Builder()
+                        .baseUrl(botConfig.getBotRequestDomain())
+                        .addConverterFactory(GsonConverterFactory.create());
+
 
         Retrofit retrofit = builder.client(httpClient.build()).build();
         return retrofit.create(serviceClass);

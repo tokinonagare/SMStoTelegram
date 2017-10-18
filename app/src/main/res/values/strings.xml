@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">SMStoTg</string>
-    <string name="message_content">信息内容</string>
-    <string name="button_show">手动发送</string>
-    <string name="send_message_status">发送情况</string>
+    <string name="group_id">频道 ID</string>
+    <string name="bot_token">机器人 Token</string>
+    <string name="button_show">保存</string>
 </resources>
